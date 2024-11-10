@@ -1,0 +1,182 @@
+{% extends "base.html" %} {% block title %} Dashboard {% endblock %}
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- Google Font: Source Sans Pro -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+/>
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fontawesome-free/css/all.min.css"
+/>
+<!-- Other CSS files -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css" />
+{% endblock stylesheets %} {% block content %}
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Sepatu Detection Dashboard</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item active">View Detected Image</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <section class="col-lg-6 connectedSortable">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Sepatu Object Detection
+              </h3>
+            </div>
+            <div class="card-body">
+              <form
+                class="form-signin col-lg-12"
+                method="post"
+                enctype="multipart/form-data"
+                name="uploadForm"
+                onsubmit="return handleUpload(event)"
+              >
+                <div class="form-group">
+                  <label for="exampleInputFile">Upload Gambar atau Video</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input
+                        type="file"
+                        name="file"
+                        class="form-control mb-3"
+                        id="inputfile"
+                        accept="image/*,video/*"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-block btn-default btn-sm" type="submit">
+                  Upload
+                </button>
+                <button
+                  id="start-detection"
+                  class="btn btn-primary btn-block mt-3"
+                  onclick="startDetection()"
+                  type="button"
+                >
+                  Start Detection
+                </button>
+                <button
+                  id="stop-detection"
+                  class="btn btn-danger btn-block mt-3"
+                  onclick="stopDetection()"
+                  type="button"
+                  style="display: none"
+                >
+                  Stop Detection
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="col-lg-6 connectedSortable">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Sepatu Object Detection
+                Results
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="tab-content p-0">
+                <div
+                  class="chart tab-pane active"
+                  id="detection-results"
+                  style="position: relative; height: 700px"
+                >
+                  <!-- Detected image display -->
+                  <img
+                    id="my-image"
+                    alt="Detected Image"
+                    src="{{ url_for('display', filename=image_path) }}"
+                    style="height: 500px; width: 600px; display: none"
+                  />
+                  <!-- Detected video display -->
+                  <!-- Replace the <video> element with <img> for better browser compatibility -->
+                  <img
+                    id="my-video-feed"
+                    src=""
+                    style="height: 500px; width: 600px; display: none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %} {% block javascripts %}
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/assets/js/adminlte.js"></script>
+
+<script>
+  // Display detected image
+  const videoElement = document.getElementById("my-video-feed");
+  const startButton = document.getElementById("start-detection");
+  const stopButton = document.getElementById("stop-detection");
+
+  function startDetection() {
+    // Set the video source to start the real-time detection
+    videoElement.src = "/video_feed";
+    videoElement.style.display = "block";
+
+    // Show the Stop button and hide the Start button
+    startButton.style.display = "none";
+    stopButton.style.display = "block";
+  }
+
+  function stopDetection() {
+    // Remove the video source to stop the detection
+    videoElement.src = "";
+    videoElement.style.display = "none";
+
+    // Show the Start button and hide the Stop button
+    startButton.style.display = "block";
+    stopButton.style.display = "none";
+  }
+
+  // Document load event to toggle default display
+  document.addEventListener("DOMContentLoaded", function () {
+    imageElement.style.display = "block";
+    videoElement.style.display = "none";
+  });
+
+  // Function to play sound based on detected object type
+  function playDetectionSound(detectionType) {
+    let audioElement;
+    if (detectionType === "Casual") {
+      audioElement = new Audio("static/assets/sounds/casual.mp3");
+    } else if (detectionType === "Formal") {
+      audioElement = new Audio("static/assets/sounds/formal.mp3");
+    }
+    audioElement.play();
+  }
+</script>
+
+{% endblock javascripts %}
