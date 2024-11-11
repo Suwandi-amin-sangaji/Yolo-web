@@ -108,14 +108,16 @@
                   style="position: relative; height: 700px"
                 >
                   <!-- Detected image display -->
+
                   <img
                     id="my-image"
-                    alt="Detected Image"
+                    alt="Detect Image Or Video real-time"
                     src="{{ url_for('display', filename=image_path) }}"
-                    style="height: 500px; width: 600px; display: none"
+                    style="height: 500px; width: 600px"
+                    onerror="this.src='path/to/camera-icon.png'"
                   />
+
                   <!-- Detected video display -->
-                  <!-- Replace the <video> element with <img> for better browser compatibility -->
                   <img
                     id="my-video-feed"
                     src=""
@@ -126,57 +128,62 @@
             </div>
           </div>
         </section>
+        {% endblock content %} {% block javascripts %}
+        <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+        <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/static/assets/js/adminlte.js"></script>
+
+        <script>
+          // Get elements
+          const imageElement = document.getElementById("my-image");
+          const videoElement = document.getElementById("my-video-feed");
+          const startButton = document.getElementById("start-detection");
+          const stopButton = document.getElementById("stop-detection");
+
+          // Start real-time detection
+          function startDetection() {
+            // Hide the detected image and show the video feed for real-time detection
+            imageElement.style.display = "none";
+            videoElement.src = "/video_feed";
+            videoElement.style.display = "block";
+
+            // Toggle button visibility
+            startButton.style.display = "none";
+            stopButton.style.display = "block";
+          }
+
+          // Stop real-time detection
+          function stopDetection() {
+            // Hide the video feed and show the detected image
+            videoElement.src = "";
+            videoElement.style.display = "none";
+            imageElement.style.display = "block";
+
+            // Toggle button visibility
+            startButton.style.display = "block";
+            stopButton.style.display = "none";
+          }
+
+          // Display detection results immediately on page load
+          document.addEventListener("DOMContentLoaded", function () {
+            imageElement.style.display = "block"; // Show the uploaded detection image
+            videoElement.style.display = "none"; // Hide the real-time video feed
+          });
+
+          // Function to play sound based on detected object type
+          function playDetectionSound(detectionType) {
+            let audioElement;
+            if (detectionType === "Casual") {
+              audioElement = new Audio("static/assets/sounds/casual.mp3");
+            } else if (detectionType === "Formal") {
+              audioElement = new Audio("static/assets/sounds/formal.mp3");
+            }
+            audioElement.play();
+          }
+        </script>
+
+        {% endblock javascripts %}
       </div>
     </div>
   </section>
 </div>
-{% endblock content %} {% block javascripts %}
-<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
-<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/static/assets/js/adminlte.js"></script>
-
-<script>
-  // Display detected image
-  const videoElement = document.getElementById("my-video-feed");
-  const startButton = document.getElementById("start-detection");
-  const stopButton = document.getElementById("stop-detection");
-
-  function startDetection() {
-    // Set the video source to start the real-time detection
-    videoElement.src = "/video_feed";
-    videoElement.style.display = "block";
-
-    // Show the Stop button and hide the Start button
-    startButton.style.display = "none";
-    stopButton.style.display = "block";
-  }
-
-  function stopDetection() {
-    // Remove the video source to stop the detection
-    videoElement.src = "";
-    videoElement.style.display = "none";
-
-    // Show the Start button and hide the Stop button
-    startButton.style.display = "block";
-    stopButton.style.display = "none";
-  }
-
-  // Document load event to toggle default display
-  document.addEventListener("DOMContentLoaded", function () {
-    imageElement.style.display = "block";
-    videoElement.style.display = "none";
-  });
-
-  // Function to play sound based on detected object type
-  function playDetectionSound(detectionType) {
-    let audioElement;
-    if (detectionType === "Casual") {
-      audioElement = new Audio("static/assets/sounds/casual.mp3");
-    } else if (detectionType === "Formal") {
-      audioElement = new Audio("static/assets/sounds/formal.mp3");
-    }
-    audioElement.play();
-  }
-</script>
-
-{% endblock javascripts %}
