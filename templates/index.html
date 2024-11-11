@@ -27,7 +27,7 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active">View Detected Image</li>
           </ol>
         </div>
@@ -67,8 +67,8 @@
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-block btn-default btn-sm" type="submit">
-                  Upload
+                <button class="btn btn-block btn-success btn-sm" type="submit">
+                  Deteksi Gambar
                 </button>
                 <button
                   id="start-detection"
@@ -100,29 +100,27 @@
                 Results
               </h3>
             </div>
-            <div class="card-body">
-              <div class="tab-content p-0">
-                <div
-                  class="chart tab-pane active"
-                  id="detection-results"
-                  style="position: relative; height: 700px"
-                >
-                  <!-- Detected image display -->
-
-                  <img
-                    id="my-image"
-                    alt="Detect Image Or Video real-time"
-                    src="{{ url_for('display', filename=image_path) }}"
-                    style="height: 500px; width: 600px"
-                    onerror="this.src='path/to/camera-icon.png'"
-                  />
-
-                  <!-- Detected video display -->
-                  <img
-                    id="my-video-feed"
-                    src=""
-                    style="height: 500px; width: 600px; display: none"
-                  />
+            <div class="container">
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="detection-results">
+                    <!-- Detected image display -->
+                    <img
+                      id="my-image"
+                      alt="Detect Image Or Video real-time"
+                      src="{{ url_for('display', filename=image_path) }}"
+                      class="img-fluid"
+                      style="max-height: 500px; width: 100%; object-fit: contain;"
+                    />
+            
+                    <!-- Detected video display -->
+                    <img
+                      id="my-video-feed"
+                      src=""
+                      class="img-fluid"
+                      style="max-height: 500px; width: 100%; display: none; object-fit: contain;"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
