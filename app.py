@@ -2,8 +2,6 @@ import os
 import torch
 import cv2
 import time
-import threading
-import queue
 from flask import Flask, render_template, request, Response, send_from_directory
 from werkzeug.utils import secure_filename
 import pyttsx3  # TTS library for audio feedback
@@ -192,4 +190,4 @@ def video_feed():
     return Response(get_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5047, debug=True)
